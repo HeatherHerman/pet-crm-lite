@@ -1,4 +1,5 @@
 const express = require('express');
+const methodOverride = require('method-override');
 const businessesRouter = require('./routes/businesses');
 const customersRouter = require('./routes/customers');
 const ordersRouter = require('./routes/orders');
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 12000;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 // Routes
 app.use('/', dashboardRouter);

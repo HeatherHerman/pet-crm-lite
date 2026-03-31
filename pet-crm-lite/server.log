@@ -1,0 +1,42 @@
+Server running on http://0.0.0.0:12000
+=== Starting Reminder Generation ===
+Business ID: 1, Total customers: 7
+[CHECK] Ravi Kumar (Bruno):
+  - Last order date: 2026-03-01
+  - Days since order: 30
+  - Computed reorder cycle: 28 days
+  - ELIGIBLE: Due for reorder (30 >= 28)
+  - SKIPPED: Already has pending reminder for 2026-03-29
+[CHECK] Sunita Sharma (Max):
+  - Last order date: 2026-02-15
+  - Days since order: 44
+  - Computed reorder cycle: 30 days
+  - ELIGIBLE: Due for reorder (44 >= 30)
+  - SKIPPED: Already has pending reminder for 2026-03-17
+[CHECK] Anil Patel (Charlie):
+  - Last order date: 2026-02-10
+  - Days since order: 49
+  - Computed reorder cycle: 30 days
+  - ELIGIBLE: Due for reorder (49 >= 30)
+  - SKIPPED: Already has pending reminder for 2026-03-12
+[CHECK] Priya Singh (Bella):
+  - Last order date: 2026-02-20
+  - Days since order: 39
+  - Computed reorder cycle: 30 days
+  - ELIGIBLE: Due for reorder (39 >= 30)
+  - SKIPPED: Already has pending reminder for 2026-03-22
+[CHECK] Vikram Mehta (Rocky):
+  - Last order date: 2026-02-25
+  - Days since order: 34
+  - Computed reorder cycle: 30 days
+  - ELIGIBLE: Due for reorder (34 >= 30)
+  - SKIPPED: Already has pending reminder for 2026-03-27
+[SKIP] Mohan Joshi (Tiger): No orders yet
+[CHECK] Suresh Reddy (Lucky):
+  - Last order date: 2026-03-05
+  - Days since order: 26
+  - Computed reorder cycle: 30 days
+  - NOT ELIGIBLE: Not due yet (26 < 30)
+=== Reminder Generation Complete ===
+Generated: 0, Skipped: 5, Eligible: 5
+✓ 0 reminders generated

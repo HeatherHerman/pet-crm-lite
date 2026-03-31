@@ -1,7 +1,7 @@
 const express = require('express');
 const { Order, Customer, Pet } = require('../models/queries');
 const multer = require('multer');
-const csv = require('csv-parse/lib/sync');
+const { parse } = require('csv-parse/sync');
 
 const router = express.Router();
 

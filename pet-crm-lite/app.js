@@ -1,0 +1,32 @@
+const express = require('express');
+const businessesRouter = require('./routes/businesses');
+const customersRouter = require('./routes/customers');
+const ordersRouter = require('./routes/orders');
+const remindersRouter = require('./routes/reminders');
+const dashboardRouter = require('./routes/dashboard');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use('/', dashboardRouter);
+app.use('/businesses', businessesRouter);
+app.use('/customers', customersRouter);
+app.use('/orders', ordersRouter);
+app.use('/reminders', remindersRouter);
+
+// Health check
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Pet CRM Lite API running' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+module.exports = app;

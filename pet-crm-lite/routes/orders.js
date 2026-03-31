@@ -119,7 +119,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     const fileContent = fs.readFileSync(req.file.path, 'utf-8');
     
     // Parse CSV
-    const records = csv(fileContent, {
+    const records = parse(fileContent, {
       columns: true,
       skip_empty_lines: true,
       trim: true

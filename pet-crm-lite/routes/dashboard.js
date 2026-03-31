@@ -108,6 +108,7 @@ router.get('/dashboard', async (req, res) => {
     th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
     th { background: #f9f9f9; }
     .due-badge { background: #ff6b6b; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+    .alert { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
     .section { margin-top: 30px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
@@ -116,6 +117,7 @@ router.get('/dashboard', async (req, res) => {
 <body>
   <div class="container">
     <h1>🐾 Pet CRM - ${business.name}</h1>
+    ${req.query.msg ? `<div class="alert">${req.query.msg}</div>` : ''}
     
     <div class="card">
       <h2>📋 Daily Actions</h2>

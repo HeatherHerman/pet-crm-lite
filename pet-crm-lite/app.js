@@ -6,7 +6,7 @@ const remindersRouter = require('./routes/reminders');
 const dashboardRouter = require('./routes/dashboard');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 12000;
 
 // Middleware
 app.use(express.json());
@@ -25,8 +25,8 @@ app.get('/', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
 
 module.exports = app;

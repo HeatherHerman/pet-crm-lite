@@ -20,25 +20,39 @@ router.post('/generate/:business_id', async (req, res) => {
     
     let generatedCount = 0;
     let skippedCount = 0;
+    let eligibleCustomers = 0;
+    
+    console.log('=== Starting Reminder Generation ===');
+    console.log(`Business ID: ${business_id}, Total customers: ${customers.length}`);
     
     for (const customer of customers) {
       // Get last order
       const lastOrder = await Order.getLastOrder(customer.id);
       
       if (!lastOrder) {
+        console.log(`[SKIP] ${customer.name} (${customer.pet_name}): No orders yet`);
         continue; // Skip customers with no orders
       }
       
       // Calculate reorder cycle
       const cycleDays = await calculateReorderCycle(customer.id, Order);
+      const lastOrderDate = new Date(lastOrder.date);
+      const today = new Date();
+      const daysSinceOrder = Math.floor((today - lastOrderDate) / (1000 * 60 * 60 * 24));
+      
+      console.log(`[CHECK] ${customer.name} (${customer.pet_name}):`);
+      console.log(`  - Last order date: ${lastOrder.date}`);
+      console.log(`  - Days since order: ${daysSinceOrder}`);
+      console.log(`  - Computed reorder cycle: ${cycleDays} days`);
       
       // Check if due for reorder
       if (isDueForReorder(lastOrder.date, cycleDays)) {
-        // Calculate due date (last order + cycle)
-        const lastOrderDate = new Date(lastOrder.date);
+        eligibleCustomers++;
         const dueDate = new Date(lastOrderDate);
         dueDate.setDate(dueDate.getDate() + cycleDays);
         const dueDateStr = formatDate(dueDate);
+        
+        console.log(`  - ELIGIBLE: Due for reorder (${daysSinceOrder} >= ${cycleDays})`);
         
         // Check if pending reminder already exists for this cycle
         const exists = await Reminder.existsPendingForCycle(customer.id, dueDateStr);
@@ -46,21 +60,31 @@ router.post('/generate/:business_id', async (req, res) => {
         if (!exists) {
           await Reminder.create(customer.id, dueDateStr);
           generatedCount++;
+          console.log(`  - CREATED: Reminder for ${dueDateStr}`);
         } else {
           skippedCount++;
+          console.log(`  - SKIPPED: Already has pending reminder for ${dueDateStr}`);
         }
+      } else {
+        console.log(`  - NOT ELIGIBLE: Not due yet (${daysSinceOrder} < ${cycleDays})`);
       }
     }
     
-    // If it's a form submission, redirect to dashboard
-    if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
-      return res.redirect('/dashboard');
+    console.log('=== Reminder Generation Complete ===');
+    console.log(`Generated: ${generatedCount}, Skipped: ${skippedCount}, Eligible: ${eligibleCustomers}`);
+    
+    // If it's a form submission, redirect to dashboard with success message
+    if (req.headers['content-type'] === 'application/x-www-form-urlencoded' || !req.headers['content-type']) {
+      // Store message in session or pass via query
+      console.log(`✓ ${generatedCount} reminders generated`);
+      return res.redirect(`/dashboard?msg=${encodeURIComponent(`${generatedCount} reminders generated`)}`);
     }
     
     res.json({
       message: 'Reminder generation complete',
       generated: generatedCount,
-      skipped: skippedCount
+      skipped: skippedCount,
+      eligible: eligibleCustomers
     });
   } catch (err) {
     console.error('Error generating reminders:', err);
